@@ -251,7 +251,9 @@ function clearCanvas() {
   lastPos = null;
 }
 
-clearCanvas();
+function normalizePixel(value) {
+  return (255 - value) / 255;
+}
 
 const brushSize = 3;
 let isDrawing = false;
@@ -283,8 +285,7 @@ function getImageDataArray(){
   const imageData = offCtx.getImageData(0, 0, 50, 50);
   let imgArray = [];
   for (let i = 0; i < imageData.data.length; i += 4){
-    let normalized = (255 - imageData.data[i]) / 255;
-    imgArray.push(normalized);
+    imgArray.push(normalizePixel(imageData.data[i]) );
   }
   return imgArray;
 }
@@ -333,8 +334,8 @@ document.getElementById("loadBatch").addEventListener("click", () => {
           const threshold = 0.5;
           const arr = [];
           for (let i = 0; i < imageData.data.length; i += 4) {
-            let gray = (255 - imageData.data[i]) / 255;
-            let bin = gray > threshold ? 1 : 0;
+            const norm = normalizePixel(imageData.data[i]);
+            const bin = norm > threshold ? 1 : 0;
             arr.push(bin);
           }
           const target = Array(10).fill(0);
@@ -386,7 +387,6 @@ document.getElementById("trainNetwork").addEventListener("click", async () => {
       await new Promise(r => setTimeout(r, 10));
     }
   }
-
   statusP.innerText = "Обучение завершено!";
 });
 
