@@ -209,7 +209,7 @@ class NeuralNetwork{
   }
 }
 
-let nn = new NeuralNetwork(2500, 64, 10, 0.1);
+let nn = new NeuralNetwork(2500, 16, 10, 0.15);
 
 let trainingData = [];
 const canvas = document.getElementById('canvas');
@@ -222,7 +222,6 @@ function getCanvasPos(e) {
     y: Math.floor((e.clientY - rect.top) * (canvas.height / rect.height))
   };
 }
-
 function drawLine(from, to){
   const dx = to.x - from.x;
   const dy = to.y - from.y;
@@ -252,7 +251,9 @@ function clearCanvas() {
   lastPos = null;
 }
 
-clearCanvas();
+function normalizePixel(value) {
+  return (255 - value) / 255;
+}
 
 const brushSize = 3;
 let isDrawing = false;
@@ -284,8 +285,7 @@ function getImageDataArray(){
   const imageData = offCtx.getImageData(0, 0, 50, 50);
   let imgArray = [];
   for (let i = 0; i < imageData.data.length; i += 4){
-    let normalized = (255 - imageData.data[i]) / 255;
-    imgArray.push(normalized);
+    imgArray.push(normalizePixel(imageData.data[i]) );
   }
   return imgArray;
 }
@@ -324,20 +324,20 @@ document.getElementById("loadBatch").addEventListener("click", () => {
 
       reader.onload = function(e) {
         img.onload = function() {
-          // Рисуем в 50x50
           const offCanvas = document.createElement("canvas");
           offCanvas.width = 50;
           offCanvas.height = 50;
           const offCtx = offCanvas.getContext("2d");
+          offCtx.imageSmoothingEnabled = false;
           offCtx.drawImage(img, 0, 0, 50, 50);
-          
           const imageData = offCtx.getImageData(0, 0, 50, 50);
+          const threshold = 0.5;
           const arr = [];
           for (let i = 0; i < imageData.data.length; i += 4) {
-            let normalized = (255 - imageData.data[i]) / 255;
-            arr.push(normalized);
+            const norm = normalizePixel(imageData.data[i]);
+            const bin = norm > threshold ? 1 : 0;
+            arr.push(bin);
           }
-
           const target = Array(10).fill(0);
           target[digit] = 1;
           trainingData.push({ input: arr, target: target });
@@ -351,27 +351,44 @@ document.getElementById("loadBatch").addEventListener("click", () => {
   });
 
   Promise.all(promises).then(() => {
-    alert("Загружено " + files.length + " изображений.");
+    alert("Образцы загружены, всего образцов:" + trainingData.length);
   });
 });
 
-document.getElementById("trainNetwork").addEventListener("click", () => {
+document.getElementById("trainNetwork").addEventListener("click", async () => {
   if (trainingData.length === 0) {
     alert("Образцов ещё нет.");
-    return undefined;
+    return;
   }
-  const epochs = 20;
+
+  const epochs = 10;
+  const batchSize = 32;
   const statusP = document.getElementById("trainingStatus");
-  statusP.innerText = "Идёт обучение...";
-  setTimeout(() => {
-    for (let i = 0; i < epochs; i++){
-      for (let sample of trainingData){
+  statusP.innerText = "Идёт обучение";
+
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  for (let epoch = 0; epoch < epochs; epoch++) {
+    shuffle(trainingData);
+
+    for (let i = 0; i < trainingData.length; i += batchSize) {
+      const batch = trainingData.slice(i, i + batchSize);
+      for (let sample of batch) {
         nn.backpropogation(sample.input, sample.target);
       }
     }
-    statusP.innerText = "Обучение завершено!";
-  }, 10);
-})
+    statusP.innerText = `Эпоха ${epoch + 1} из ${epochs}`;
+    if (epoch % 5 === 0 || epoch === epochs - 1) {
+      await new Promise(r => setTimeout(r, 10));
+    }
+  }
+  statusP.innerText = "Обучение завершено!";
+});
 
 document.getElementById("predictDigit").addEventListener("click", () => {
   const inputArray = getImageDataArray();
