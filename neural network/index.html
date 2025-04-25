@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NeuralNetowrk</title>
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+    <h1>Нарисуйте цифру:</h1>
+    <canvas id="canvas" width="50" height="50"></canvas>
+    <br>
+    <label for="digitLabel">Введите цифру:</label>
+    <input type="number" id="digitLabel" min="0" max="9">
+    <button id="saveSample">Сохранить образец</button>
+    <button id="clearBtn">Очистить холст</button>
+    <br><br>
+    <button id="trainNetwork">Обучить сеть</button>
+    <button id="predictDigit">Распознать цифру</button>
+    <p id="result"></p>
+    <p id="trainingStatus"></p>
+    <script src="app.js"></script>
+</body>
+</html>
