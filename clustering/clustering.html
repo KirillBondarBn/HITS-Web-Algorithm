@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Clustering</title>
+        <link rel="stylesheet" href="clustering.css">
+    </head>
+
+    <body>
+        <div id="content">
+            <div id="settings_bar">
+                <div class="module">
+                    <label class="header">Mode</label>
+                    <div id="mode">
+                        <input id="set_point" type="radio" name="mode" checked>
+                        <label for="set_point">Set point</label>
+                    </div>
+                    <div>  
+                        <input id="remove_point" type="radio" name="mode">
+                        <label for="remove_point">Remove point</label>
+                    </div>
+                    <div>
+                        <input id="explore_field" type="radio" name="mode">
+                        <label for="explore_field">Explore field</label>
+                    </div>
+                </div>
+                
+                <div class="module" id="field_settings">
+                    <label class="header">Field settings</label>
+                    <div id="set_point_radius_range">
+                        <label id="point_radius_label">Point radius: 10</label>
+                        <input id="point_radius" type="range" value="10" min="5" max="50">
+                    </div>
+                    
+                    <div id="set_scale_range">
+                        <label id="set_scale_label">Scale: 1</label>
+                        <input id="set_scale" type="range" value="1" min="0.1" max="5" step="0.1">
+                    </div>
+                </div>
+                <div class="module" id="clusterize_algorithms">
+                    <label class="header">Algorithms</label>
+                    <div id="k-means">
+                        <button id="k_means_button">k_means</button>
+                        <div id="set_cluster_count_range">
+                            <label id="cluster_count_label">Clusters count: 2</label>
+                            <input id="cluster_count" type="range" value="2" min="1" max="10">
+                        </div>
+                    </div>
+                    <div id="dbscan">
+                        <button id="dbscan_button">DBSCAN</button>
+                        <div id="set_cluster_count_range">
+                            <label id="epsilon_label">Epsilon: 200</label>
+                            <input id="epsilon" type="range" value="200" min="100" max="10000">
+                            <label id="minpts_label">minPts: 5</label>
+                            <input id="minpts" type="range" value="5" min="1" max="100">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="module" id="buttons">
+                    <label class="header">Other</label>
+                    <button id="reset_button">Reset</button>
+                    <button id="export_button">Export</button>
+                    <label for="import_button">Import</label>
+                    <input id="import_button" type="file" accept=".txt">
+                    <a href="../index.html">Back to main page</a>
+                </div>
+            </div>
+            
+            <div id="visualisation_field">
+                <canvas id="field" oncontextmenu="return false;"></canvas>
+            </div>
+            
+            <div id="point_config">
+                <h1>Point configuration</h1>
+                <p id="info_p">Select "Explore field" mode to view point configurations.</p>
+            </div>
+            
+        </div>
+        <script src="clustering.js" type="module"></script>
+        
+    </body>
+</html>

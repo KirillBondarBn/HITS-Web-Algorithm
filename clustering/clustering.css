@@ -1,0 +1,29 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#content {
+    margin: 0px;
+    padding: 0px;
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 4fr 1fr;
+    grid-template-rows: 1fr 6fr;
+}
+
+.module {
+    display: grid;
+    padding: 15px;
+}
+
+#field {
+    height: 100%;
+    width: 100%;
+}
+
+#settings_bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column: 1/3;
+}
