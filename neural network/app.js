@@ -302,12 +302,65 @@ document.getElementById("saveSample").addEventListener("click", () => {
   alert("Образец сохранён, всего образцов - " + trainingData.length);
   clearCanvas();
 });
+
+document.getElementById("loadBatch").addEventListener("click", () => {
+  const digit = parseInt(document.getElementById("batchDigit").value);
+  const files = document.getElementById("batchUpload").files;
+
+  if (isNaN(digit) || digit < 0 || digit > 9) {
+    alert("Введите корректную цифру (0–9)");
+    return;
+  }
+
+  if (files.length === 0) {
+    alert("Выберите хотя бы один PNG-файл.");
+    return;
+  }
+
+  const promises = Array.from(files).map(file => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        img.onload = function() {
+          // Рисуем в 50x50
+          const offCanvas = document.createElement("canvas");
+          offCanvas.width = 50;
+          offCanvas.height = 50;
+          const offCtx = offCanvas.getContext("2d");
+          offCtx.drawImage(img, 0, 0, 50, 50);
+          
+          const imageData = offCtx.getImageData(0, 0, 50, 50);
+          const arr = [];
+          for (let i = 0; i < imageData.data.length; i += 4) {
+            let normalized = (255 - imageData.data[i]) / 255;
+            arr.push(normalized);
+          }
+
+          const target = Array(10).fill(0);
+          target[digit] = 1;
+          trainingData.push({ input: arr, target: target });
+
+          resolve();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  Promise.all(promises).then(() => {
+    alert("Загружено " + files.length + " изображений.");
+  });
+});
+
 document.getElementById("trainNetwork").addEventListener("click", () => {
   if (trainingData.length === 0) {
     alert("Образцов ещё нет.");
     return undefined;
   }
-  const epochs = 50;
+  const epochs = 20;
   const statusP = document.getElementById("trainingStatus");
   statusP.innerText = "Идёт обучение...";
   setTimeout(() => {
@@ -317,7 +370,7 @@ document.getElementById("trainNetwork").addEventListener("click", () => {
       }
     }
     statusP.innerText = "Обучение завершено!";
-  }, 100);
+  }, 10);
 })
 
 document.getElementById("predictDigit").addEventListener("click", () => {
