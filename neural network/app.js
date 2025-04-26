@@ -394,10 +394,12 @@ document.getElementById("predictDigit").addEventListener("click", () => {
   const inputArray = getImageDataArray();
   const output = nn.feedforward(inputArray);
   let prediction = 0;
-  for (let i = 1; i < output.length; i++){
+  for (let i = 0; i < output.length; i++){
     if (output[i] > output[prediction]){
       prediction = i;
     }
   }
+  console.log(inputArray);
+  console.log(output);
   document.getElementById("result").innerText = "Цифра на экране: " + prediction;
 });
