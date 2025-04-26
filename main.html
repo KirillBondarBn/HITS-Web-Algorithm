@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Алгоритмы визуализации</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        .card {
+            width: 200px;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-front {
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            color: white;
+            transform: rotateY(180deg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card-back h3 {
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .card-back p {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .astar {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Images/astar.svg');
+        }
+
+        .clustering {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Images/clust.svg');
+        }
+
+        .genetic {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Images/genetic.svg');
+        }
+
+        .ant {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Images/ant.svg');
+        }
+
+        .neural {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Images/neural.svg');
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <a href="/aStar/astar.html" class="card-link">
+                <div class="card-inner">
+                    <div class="card-front astar">
+                        Алгоритм A*
+                    </div>
+                    <div class="card-back">
+                        <h3>A* (A-star)</h3>
+                        <p>Алгоритм поиска кратчайшего пути в лабиринте</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="card">
+            <a href="/clustering/clustering.html" class="card-link">
+                <div class="card-inner">
+                    <div class="card-front clustering">
+                        Кластеризация
+                    </div>
+                    <div class="card-back">
+                        <h3>Кластеризация</h3>
+                        <p>Метод машинного обучения для группировки объектов в кластеры по схожести.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="card">
+            <a href="/Genetic/Gen.html" class="card-link">
+                <div class="card-inner">
+                    <div class="card-front genetic">
+                        Генетический алгоритм
+                    </div>
+                    <div class="card-back">
+                        <h3>Генетический алгоритм</h3>
+                        <p>Алгоритм оптимизации, имитирующий естественный отбор. Включает операции селекции, скрещивания и мутации для поиска оптимального решения.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="card">
+            <a href="/Ant/ant.html" class="card-link">
+                <div class="card-inner">
+                    <div class="card-front ant">
+                        Муравьиный алгоритм
+                    </div>
+                    <div class="card-back">
+                        <h3>Муравьиный алгоритм</h3>
+                        <p>Поиск маршрута, вдохновленный поведением муравьев, ищущих путь к пище. Использование "феромонов" для нахождения оптимального пути.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="card">
+            <a href="/neural network/index.html" class="card-link">
+                <div class="card-inner">
+                    <div class="card-front neural">
+                        Нейронная сеть
+                    </div>
+                    <div class="card-back">
+                        <h3>Нейронная сеть</h3>
+                        <p>Определение изображенного на холсте числа с помощью машинного обучения нейронов.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
