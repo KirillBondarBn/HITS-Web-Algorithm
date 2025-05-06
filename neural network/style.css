@@ -1,7 +1,209 @@
-canvas {
-    border: 1px solid #000;
-    image-rendering: pixelated;
+body{
+    background: rgb(110, 110, 110);
+  }
+  
+  
+  canvas {
+    display: flex;
     width: 500px;
-    height: 500px;
-    cursor: crosshair;
-}
+      height: 500px;
+      cursor: crosshair;
+      margin: 0px auto;
+  }
+  
+  .canvas-container {
+    justify-content: center;
+    border: 2px solid #000;
+      border-radius: 8px;
+      image-rendering: pixelated;
+  
+      border: 2px solid rgba(68, 68, 68, 0.7);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .main-container {
+      display: flex;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+  }
+  
+  .left-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      
+  }
+  
+  .buttons-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      backdrop-filter: blur(5px);
+  }
+  
+  .buttons-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+  }
+  
+  .controls-container {
+      width: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(5px);
+  }
+  
+  .border-button {
+      text-decoration: none;
+      display: inline-block;
+      padding: 12px 25px;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.1);
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+  }
+  
+  .border-button {
+    text-decoration: none;
+    display: inline-block;
+    padding: 20px 30px;
+    margin: 10px 46px;
+    position: relative;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, .4);
+    background: none;
+    font-weight: 300;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .border-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .controls-button{
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 5px 0px;
+    position: relative;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, .4);
+    background: none;
+    font-weight: 300;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .controls-button:hover{
+    background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  
+  .custom-file-upload {
+      display: inline-block;
+      padding: 6px 12px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f8f8f8;
+      margin-bottom: 10px;
+      color: black;
+  }
+  
+  
+  .controls-panel h3 {
+      color: white;
+      margin: 0 0 15px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+  }
+  
+  .control-group {
+      margin-bottom: 18px;
+  }
+  
+  .control-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: white;
+      font-size: 16px;
+      font-family: 'Roboto', sans-serif;
+  }
+  
+  .control-group input[type="range"] {
+      width: 100%;
+      margin-bottom: 5px;
+      background: transparent;
+  }
+  
+  .control-group span {
+      display: block;
+      text-align: right;
+      color: white;
+      font-size: 13px;
+  }
+  
+  
+  input:checked + .slider {
+      background-color: #9c2929;
+  }
+  
+  input:checked + .slider:before {
+      transform: translateX(26px);
+  }
+  
+  @media (max-width: 900px) {
+      .main-container {
+          flex-direction: column;
+      }
+      
+      .controls-container {
+          width: auto;
+          order: -1;
+          margin-bottom: 20px;
+      }
+      
+      .buttons-container {
+          justify-content: center;
+      }
+      
+      .border-button {
+          padding: 10px 20px;
+          font-size: 13px;
+      }
+  }
+  

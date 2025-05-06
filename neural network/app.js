@@ -133,29 +133,25 @@ class Matrix {
 }
 
 
-function randomMatrix(rows, cols){
-  let data = [];
-  for (let i = 0; i < rows; i++) {
-    let row = [];
-    for (let j = 0; j < cols; j++) {
-      row.push(Math.random() * 2 - 1);
-    }
-    data.push(row);
-  }
-  return new Matrix(data);
-}
-
-
 class NeuralNetwork{
   constructor(inputNodes, hiddenNodes, outputNodes, learningRate){
     this.inputNodes = inputNodes;
     this.hiddenNodes = hiddenNodes;
     this.outputNodes = outputNodes;
     this.learningRate = learningRate;
-    this.weights_ih = randomMatrix(this.hiddenNodes, this.inputNodes);
-    this.weights_ho = randomMatrix(this.outputNodes, this.hiddenNodes);
-    this.bias_h = randomMatrix(this.hiddenNodes, 1);
-    this.bias_o = randomMatrix(this.outputNodes, 1);
+    this.weights_ih = null;
+    this.weights_ho = null;
+    this.bias_h = null;
+    this.bias_o = null;
+  }
+  static async createMnistMatrix(url){
+    const mnistMatrix = await fetch(url).then(r => r.json());
+    const nn = new NeuralNetwork(mnistMatrix.inputNodes, mnistMatrix.hiddenNodes, mnistMatrix.outputNodes, mnistMatrix.learningRate);
+    nn.weights_ih = new Matrix(mnistMatrix.weights_ih.data);
+    nn.weights_ho = new Matrix(mnistMatrix.weights_ho.data);
+    nn.bias_h = new Matrix(mnistMatrix.bias_h.data);
+    nn.bias_o = new Matrix(mnistMatrix.bias_o.data);
+    return nn;
   }
   sigmoid(x){
     return (1 / (1 + Math.exp(-x)));
@@ -208,8 +204,8 @@ class NeuralNetwork{
     this.bias_h = Matrix.add(this.bias_h, hidden_gradient);
   }
 }
-
-let nn = new NeuralNetwork(2500, 16, 10, 0.15);
+let nn;
+NeuralNetwork.createMnistMatrix('mnistMatrix.json').then(instance => {nn = instance, console.log('Нейросеть готова: ', nn)});
 
 let trainingData = [];
 const canvas = document.getElementById('canvas');
@@ -354,40 +350,42 @@ document.getElementById("loadBatch").addEventListener("click", () => {
     alert("Образцы загружены, всего образцов:" + trainingData.length);
   });
 });
-
+async function trainEpoch(data, batchSize) {
+  for (let i = 0; i < data.length; i += batchSize) {
+    const batch = data.slice(i, i + batchSize);
+    for (let sample of batch) {
+      nn.backpropogation(sample.input, sample.target);
+    }
+    await new Promise(res => setTimeout(res, 0));
+  }
+  return;
+}
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 document.getElementById("trainNetwork").addEventListener("click", async () => {
   if (trainingData.length === 0) {
     alert("Образцов ещё нет.");
     return;
   }
-
   const epochs = 10;
   const batchSize = 32;
   const statusP = document.getElementById("trainingStatus");
   statusP.innerText = "Идёт обучение";
 
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  }
-
   for (let epoch = 0; epoch < epochs; epoch++) {
     shuffle(trainingData);
-
-    for (let i = 0; i < trainingData.length; i += batchSize) {
-      const batch = trainingData.slice(i, i + batchSize);
-      for (let sample of batch) {
-        nn.backpropogation(sample.input, sample.target);
-      }
-    }
+    await trainEpoch(trainingData, batchSize);
     statusP.innerText = `Эпоха ${epoch + 1} из ${epochs}`;
     if (epoch % 5 === 0 || epoch === epochs - 1) {
       await new Promise(r => setTimeout(r, 10));
     }
   }
   statusP.innerText = "Обучение завершено!";
+  console.log("Обученная сеть: ", nn);
 });
 
 document.getElementById("predictDigit").addEventListener("click", () => {
